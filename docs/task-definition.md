@@ -1,45 +1,93 @@
-# Task Definition
+---
+title: Define a Kubernetes job task
+sidebar_label: Task definition
+description: "Define a Kubernetes job task in OpCon to submit a containerized command to a Kubernetes cluster through the ACS Kubernetes Connector."
+tags:
+  - Procedural
+  - Automation Engineer
+  - Jobs
+  - Agents
+---
 
-## Defining tasks
+# Define a Kubernetes job task
 
-The Kubernetes Job supports the following task types:
+**Theme:** Configure  
+**Who Is It For?** Automation Engineer
 
-Task Type      | Description
----------------|-------------------------------------
-Job            | Executes a command within a container in a Kubernetes Cluster.
+## What is it?
 
-Defining tasks only requires providing the values associated with the specific task. It is possible to use global properties when defining tasks.
+A Kubernetes job task tells OpCon what container image to run, what command and arguments to pass to it, how many pods to spin up, and what resource limits to apply. When OpCon runs the job, the connector submits these parameters to the Kubernetes cluster.
 
-![Defining the Task](../static/img/task.png)
+- Use this procedure when you need to schedule a containerized workload through OpCon
+- Use this procedure when configuring resource constraints for jobs that run in a shared Kubernetes cluster
 
-### Job Task
+The Kubernetes Connector supports the following task type:
 
-1.  Open Solution Manager.
-2.  From the Home page select **Library**
-3.  From the ***Administration*** Menu select **Master Jobs**.
-4.  Select **+Add** to add a new master job definition.
-5.  Fill in the task details.
-    - Select the **Schedule** name from the drop-down list.
-    - In the **Name** field enter a unique name for the task within the schedule.
-    - Select **Kubernetes Job** from the **Job Type** drop-down list.
-    - Select **Job** from the **Task Type** drop-down list.
+| Task type | Description |
+|---|---|
+| Job | Runs a command within a container in a Kubernetes cluster |
 
-Enter details for Task Type **Job**. 
+## Define a Job task
 
-1.  Select the **Task Details** button.
-2.  In the **Integration Selection** section, select the primary integration which is an ACSEase connection previously defined.
-3.  In the **Task Configuration** section
-    - In the **Image** field enter the image from the Docker Registry that supports the command to be submitted.
-    - In the **Name Space** field enter the name space that the task should execute within (default value **default**).
-    - In the **Job Name** field enter the name of the Kubernetes job.
-    - In the **Container Name** field enter the name of the container when the images run.
-    - In the **Command** field enter the command to execute within the container (multiple values can be entered by using a comma (,) as a separator character).
-    - In the **Arguments** field enter the arguments to pass to the command (multiple values can be entered by using a comma (,) as a separator character).
-    - In the **Pods to Complete** field enter the number of times the task should be executed (default value **1**).
-    - In the **Parallel Executions** field enter how many execution can run con-currently (default value **1**).
-    - In the **Resources** section enter the **requests** and **limits** associated with the task.
-        - In the **Request CPU** field enter the initial CPU requirement (default value **250m**).
-        - In the **Request Memory** field enter the initial Memory requirement (default value **512Mi**).
-        - In the **Limit CPU** field enter the maximum CPU allowed (default value **500m**).
-        - IN the **Limit Memory** field enter the maximun Memeroy allowed (default value **1Gi**).
-4.  Save the definition changes. 
+**Prerequisite:** The Kubernetes agent must be defined and communicating before a job task can be submitted. See [Agent definition](./agent-definition.md).
+
+To define a Kubernetes job task, complete the following steps:
+
+1. In Solution Manager, select **Library**.
+2. From the **Administration** menu, select **Master Jobs**.
+3. Select **+Add**.
+4. In the **Schedule** field, select the schedule name from the list.
+5. In the **Name** field, enter a unique name for the job within the schedule.
+6. In the **Job Type** field, select **Kubernetes Job** from the list.
+7. In the **Task Type** field, select **Job** from the list.
+8. Select the **Task Details** button.
+9. In the **Integration Selection** section, select the Kubernetes agent previously defined.
+10. In the **Task Configuration** section, complete the following fields:
+
+    | Field | Description |
+    |---|---|
+    | **Image** | The Docker Registry image that provides the runtime environment for the command |
+    | **Name Space** | The Kubernetes namespace to run the job in (default: `default`) |
+    | **Job Name** | The name assigned to the Kubernetes job object |
+    | **Container Name** | The name assigned to the container when the image runs |
+    | **Command** | The command to run inside the container. Separate multiple values with a comma (`,`) |
+    | **Arguments** | The arguments to pass to the command. Separate multiple values with a comma (`,`) |
+    | **Pods to Complete** | The number of successful pod completions required (default: `1`) |
+    | **Parallel Executions** | The number of pods that may run concurrently (default: `1`) |
+
+11. In the **Resources** section, complete the following fields:
+
+    | Field | Description | Default |
+    |---|---|---|
+    | **Request CPU** | The initial CPU allocation guaranteed to each pod | `250m` |
+    | **Request Memory** | The initial memory allocation guaranteed to each pod | `512Mi` |
+    | **Limit CPU** | The maximum CPU each pod may consume | `500m` |
+    | **Limit Memory** | The maximum memory each pod may consume | `1Gi` |
+
+12. Select the **Save** button. The job is added to the schedule.
+
+## FAQs
+
+**How do I pass multiple commands or arguments?**  
+Separate multiple values with a comma (`,`). For example, to pass two arguments, enter `--config,/etc/app/config.yaml` in the **Arguments** field.
+
+**What is the difference between Pods to Complete and Parallel Executions?**  
+**Pods to Complete** sets the total number of successful pod runs required before the job is considered finished. **Parallel Executions** sets how many of those pods can run at the same time. For example, setting **Pods to Complete** to `4` and **Parallel Executions** to `2` runs two pods at a time until four have completed successfully.
+
+**What happens if a pod exceeds its CPU or memory limit?**  
+Kubernetes terminates any pod that exceeds its memory limit. CPU throttling applies when a pod exceeds its CPU limit. Set limits high enough to avoid unexpected pod terminations.
+
+**Can I use OpCon global properties in task fields?**  
+Yes. Global properties using the `[[property_name]]` token syntax are supported in all task configuration fields.
+
+## Glossary
+
+**Image** — A packaged container image stored in a Docker Registry that defines the runtime environment and application code for the pod.
+
+**Namespace** — A Kubernetes isolation boundary that logically separates workloads within a cluster. Jobs submitted to a namespace are only visible to and affected by resources within that namespace.
+
+**Pods to Complete** — The Kubernetes job completion count. OpCon waits until this many pods have finished successfully before marking the job as complete.
+
+**Resource requests** — The minimum CPU and memory that Kubernetes guarantees to a pod. The cluster scheduler only places a pod on a node that has at least this much capacity available.
+
+**Resource limits** — The maximum CPU and memory a pod may consume. Kubernetes enforces limits by throttling CPU and terminating pods that exceed memory limits.

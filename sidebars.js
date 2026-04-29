@@ -1,9 +1,10 @@
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 module.exports = {
   mySidebar: [
-    'index',
-	'release-notes',
-	'installation',
-	'agent-definition',
-	'task-definition',
+    'overview',
+    'release-notes',
+    'installation',
+    'agent-definition',
+    'task-definition',
   ],
 };

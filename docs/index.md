@@ -1,9 +1,51 @@
-# ACS KubernetesJob Connector
+---
+slug: "/"
+hide_table_of_contents: true
+displayed_sidebar: null
+---
 
-The ACS Kubernetes Job submits requests to a Kubernetes environment to execute a command within a container (pod). The Kubernetes environment will spin up the container (pod) and execute the task. It is possible to request Kubernetes to execute this task within multiple containers (pods) and also specify how many of the containers (pods) may execute in parallel. Once the execution is complete, the ACS KubernetesJob requests the job log from all containers (pods) and consolidates these outputs into a single OpCon job log. 
+# ACS Kubernetes Connector
 
-The Kubernetes Job ensures that the job environment is cleaned up correctly following the job execution. 
+The ACS Kubernetes Connector enables OpCon to submit, monitor, and manage jobs within a Kubernetes cluster.
 
-![Overview](../static/img/overview.png)
+<div style={{display: 'flex', gap: '0.75rem', alignItems: 'flex-start', flexWrap: 'wrap', marginTop: '1rem'}}>
 
-The ACS KubernetesJob implementation uses the KubernetesClient library to provide the connection between ACS and the Kubernetes Cluster. The KubernetesClient submits the requests, monitors them. Upon completion ACS requests the KubernetesClient to retrieve the job log from the containers (pods) and then cleanup. Then ACS formats a single OpCon job log containing all the job logs from the containers (pods).
+<div style={{flex: '1', minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '0.6rem'}}>
+
+<div style={{background: 'var(--ifm-card-background-color)', border: '1px solid var(--ifm-color-emphasis-400)', borderRadius: '10px', padding: '0.75rem 1rem'}}>
+
+### Overview
+
+- [Overview](./overview.md)
+- [Release Notes](./release-notes.md)
+
+</div>
+
+</div>
+
+<div style={{flex: '1', minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '0.6rem'}}>
+
+<div style={{background: 'var(--ifm-card-background-color)', border: '1px solid var(--ifm-color-emphasis-400)', borderRadius: '10px', padding: '0.75rem 1rem'}}>
+
+### Installation
+
+- [Installation](./installation.md)
+
+</div>
+
+</div>
+
+<div style={{flex: '1', minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '0.6rem'}}>
+
+<div style={{background: 'var(--ifm-card-background-color)', border: '1px solid var(--ifm-color-emphasis-400)', borderRadius: '10px', padding: '0.75rem 1rem'}}>
+
+### Configuration
+
+- [Agent definition](./agent-definition.md)
+- [Task definition](./task-definition.md)
+
+</div>
+
+</div>
+
+</div>

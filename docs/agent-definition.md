@@ -1,45 +1,65 @@
-# Agent Definition
+---
+title: Define the ACS Kubernetes Connector agent
+sidebar_label: Agent definition
+description: "Create the script and agent definition in OpCon that allow the ACS Kubernetes Connector to communicate with a Kubernetes cluster."
+tags:
+  - Procedural
+  - System Administrator
+  - Automation Engineer
+  - Agents
+---
 
-All definitions can only be performed using Solution Manager.
+# Define the ACS Kubernetes Connector agent
 
-Once the sma.acs.KubernetesJob plugin has been registered with the OpCon system, it will be possible to perform agent definitions.
+**Theme:** Configure  
+**Who Is It For?** System Administrator, Automation Engineer
 
-The .kube/config associated with the Kubernetes cluster connectivity, should be saved as a KubernetesJob script.
+## What is it?
 
-## Defining KubernetesJob Scripts
+Before OpCon can submit jobs to a Kubernetes cluster, you must define two objects in Solution Manager: a KubernetesJob script that holds the cluster connection configuration, and an agent definition that references that script.
 
-The ACS KubernetesJob implementation uses a script to provide .kube/config file that the connection requires.
+- Use this procedure when setting up the connector for the first time in a new OpCon environment
+- Use this procedure when connecting to a new Kubernetes cluster that does not yet have a script or agent defined
 
-Use the created .kube/config to provide the contents of the script.
+All definitions are performed in Solution Manager.
 
-Using Solution Manager
-- Select **Library**.
-- Select **Scripts**.
-- Select **Script Types** from the upper right hand corner. 
-    - Select **+Add**
-    - In the ***Name*** field enter **KubernetesJob**.
-    - In the ***File Extension field*** enter **txt**.
-    - In the ***Description*** field enter **Used for ACS KubernetesJob Integration**.
-    - Select Save.
-- Select **Script Runners** from the upper right hand corner. 
-    - Select **+Add**
-    - In the ***Name*** field enter **KubernetesJob**.
-    - In the ***OS*** field select **KubernetesJob** from the drop-down list.
-    - In the ***Type*** field select **KubernetesJob** from the drop-down list.
-    - In the ***Command*** field enter **cmd.exe /c**.
-    - Select Save.
-- Select **Scripts** from the upper right hand corner.
-    - Create the Connector.config script.
-    - Select **+Add**.
-    - In the ***Name*** field enter a name for the script. It is suggested using the proposed agent name and append **_config_** to the name. 
-    - In the ***Type*** field select **KubernetesJob** from the drop-down list.
-    - Assign the required roles.
-    - In the ***Script*** paste the contents of the **.kube/config** file.
-    - Select Save.
+## Define KubernetesJob scripts
 
-Example config file
+The connector uses a script to store the `.kube/config` file that defines the Kubernetes cluster connection. You must create a script type, a script runner, and the script itself before defining the agent.
 
-```
+To define the KubernetesJob script type and runner, complete the following steps:
+
+1. In Solution Manager, select **Library**.
+2. Select **Scripts**.
+3. Select **Script Types** from the upper right corner.
+4. Select **+Add**.
+5. In the **Name** field, enter `KubernetesJob`.
+6. In the **File Extension** field, enter `txt`.
+7. In the **Description** field, enter `Used for ACS KubernetesJob Integration`.
+8. Select the **Save** button.
+9. Select **Script Runners** from the upper right corner.
+10. Select **+Add**.
+11. In the **Name** field, enter `KubernetesJob`.
+12. In the **OS** field, select **KubernetesJob** from the list.
+13. In the **Type** field, select **KubernetesJob** from the list.
+14. In the **Command** field, enter `cmd.exe /c`.
+15. Select the **Save** button.
+
+To create the connector configuration script, complete the following steps:
+
+1. In Solution Manager, select **Library**.
+2. Select **Scripts**.
+3. Select **Scripts** from the upper right corner.
+4. Select **+Add**.
+5. In the **Name** field, enter a name for the script. The recommended convention is to append `_config` to the intended agent name.
+6. In the **Type** field, select **KubernetesJob** from the list.
+7. Assign the required roles.
+8. In the **Script** area, paste the full contents of the `.kube/config` file for your cluster.
+9. Select the **Save** button.
+
+The following example shows the structure of a `.kube/config` file:
+
+```yaml
 apiVersion: v1
 clusters:
 - cluster:
@@ -63,29 +83,47 @@ users:
     *************
 ```
 
-## Defining ACS KubernetesJob Agent
+## Define the ACS Kubernetes Connector agent
 
-This is done by adding a new ACS KubernetesJob Agent definition using Solution Manager. 
-
-Items defined in red are required values (note : global properties are supported). 
+After the script is created, define the agent in Solution Manager.
 
 ![Defining the Agent](../static/img/agent.png)
 
-1.  Open Solution Manager.
-2.  From the Home page select **Library**
-3.  From the ***Administration*** Menu select **Agents**.
-4.  Select **+Add** to add a new agent definition.
-5.  Fill in the agent details
-    - Insert a unique name for the connection.
-    - Select **Kubernetes Job** from the **Type** drop-down list.
-    - Select **General Settings**
-    - Check that the NetCom Name is set to **Default** or the SMA Relay name if Relay is being used. 
-    - Select **Kubernetes Job Settings**
-   - In the **Config Script** section select the script containing the .kube/config information.
-    - In the **Retain Log files** field enter the vault indicating how long log files should be retained.  
-6.  Save the definition changes. 
-7.  Now select **Communication Settings**
-    Ensure that the **Requires XML Escape Sequences: User-Defined** field is set to **True**. 
-    If not change the field and save the definition changes.
-8.  Start the connection by selecting the **Change Communication Status** button and selecting **Enable Full Comm.**. 
+To define the agent, complete the following steps:
 
+1. In Solution Manager, select **Library**.
+2. From the **Administration** menu, select **Agents**.
+3. Select **+Add**.
+4. In the **Name** field, enter a unique name for the connection.
+5. In the **Type** field, select **Kubernetes Job** from the list.
+6. Select **General Settings**.
+7. Verify that the **NetCom Name** field is set to **Default**, or enter the name of the SMA Relay if a relay is in use.
+8. Select **Kubernetes Job Settings**.
+9. In the **Config Script** field, select the script that contains the `.kube/config` information.
+10. In the **Retain Log files** field, enter the number of days to retain log files.
+11. Select the **Save** button.
+12. Select **Communication Settings**.
+13. Verify that the **Requires XML Escape Sequences: User-Defined** field is set to **True**. If it is not, set it to **True** and select the **Save** button.
+14. Select the **Change Communication Status** button and select **Enable Full Comm**. The agent connection is established.
+
+## FAQs
+
+**Where do I get the `.kube/config` file?**  
+The `.kube/config` file is provided by your Kubernetes cluster administrator. It contains the cluster endpoint, authentication certificates, and context definitions required to connect to the cluster.
+
+**Can I define multiple agents for different Kubernetes clusters?**  
+Yes. Create a separate script and agent definition for each cluster. Each agent uses its own `.kube/config` script to establish an independent cluster connection.
+
+**What does the NetCom Name field control?**  
+The **NetCom Name** field determines which OpCon communication channel the agent uses. Use **Default** for standard on-premises deployments. If your environment routes agent communication through a named relay, enter the relay name here.
+
+**Why must XML escape sequences be enabled?**  
+Kubernetes job definitions include YAML content that contains characters such as `<`, `>`, and `&` that must be escaped when transmitted through the OpCon communication protocol. Enabling this setting ensures those characters are transmitted correctly.
+
+## Glossary
+
+**NetCom** — The OpCon network communication layer that handles message exchange between the OpCon server and agents.
+
+**.kube/config** — The Kubernetes client configuration file that defines cluster endpoints, user credentials, and context settings. The connector uses this file to authenticate and communicate with the cluster.
+
+**Script Repository** — The OpCon library where reusable scripts are stored and versioned. Scripts can be assigned roles for access control and referenced from agent and job definitions.

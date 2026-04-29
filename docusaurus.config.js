@@ -1,4 +1,4 @@
-/** @type {import('@docusaurus/types').DocusaurusConfig} */
+/** @type {import('@docusaurus/types').Config} */
 module.exports = {
   title: 'SMA Technologies Help',
   tagline: 'ACS Kubernetes Connector',
@@ -7,7 +7,7 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'continuous',
+  organizationName: 'smatechnologies',
   projectName: 'acs-kubernetes-docs',
   themeConfig: {
     navbar: {
@@ -28,7 +28,7 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          breadcrumbs: false,
+          breadcrumbs: true,
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
@@ -37,17 +37,10 @@ module.exports = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-                gtag: {
+        gtag: {
           trackingID: 'G-7XYMFXX81Y',
         },
       },
     ],
-  ],
-  plugins: [
-//    [
-//      require.resolve('@cmfcmf/docusaurus-search-local'), 
-//      {
-//      }
-//    ],
   ],
 };
