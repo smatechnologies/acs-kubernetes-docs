@@ -52,19 +52,19 @@ To define a Kubernetes job task, complete the following steps:
     | **Container Name** | The name assigned to the container when the image runs |
     | **Command** | The command to run inside the container. Separate multiple values with a comma (`,`) |
     | **Arguments** | The arguments to pass to the command. Separate multiple values with a comma (`,`) |
-    | **Pods to Complete** | The number of successful pod completions required (default: `1`) |
-    | **Parallel Executions** | The number of pods that may run concurrently (default: `1`) |
-
-11. In the **Resources** section, complete the following fields:
-
-    | Field | Description | Default |
-    |---|---|---|
+    | **Volume Mounts** | Optional information about a volume that should be mounted for the task to process |
+    | **Name** | The name of the volume to mount |
+    | **Mount Path** | The mount path of the volume |
+    | **Claim Name** | The PVC name of the volume |
+    | **Resources** | Optional information about a volume that should be mounted for the task to process |
     | **Request CPU** | The initial CPU allocation guaranteed to each pod | `250m` |
     | **Request Memory** | The initial memory allocation guaranteed to each pod | `512Mi` |
     | **Limit CPU** | The maximum CPU each pod may consume | `500m` |
     | **Limit Memory** | The maximum memory each pod may consume | `1Gi` |
+    | **Pods to Complete** | The number of successful pod completions required (default: `1`) |
+    | **Parallel Executions** | The number of pods that may run concurrently (default: `1`) |
 
-12. Select the **Save** button. The job is added to the schedule.
+11. Select the **Save** button. The job is added to the schedule.
 
 ## FAQs
 

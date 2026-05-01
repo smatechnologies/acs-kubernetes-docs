@@ -13,6 +13,14 @@ tags:
 
 ## 26
 
+### 26.0.2
+
+2026 May
+
+### What's new
+
+:eight_spoked_asterisk: **CON-1507**: Added the capability to optionally define a volume mount when defining a Kubernets Job. 
+
 ### 26.0.1
 
 2026 April
