@@ -13,6 +13,25 @@ tags:
 
 ## 26
 
+### 26.0.4
+
+2026 July
+
+### What's new
+
+:eight_spoked_asterisk: **CON-1868**: Add RestartPolicy option. 
+:eight_spoked_asterisk: **CON-1953**: Add BackOffLimits option. 
+
+### 26.0.3
+
+2026 June
+
+### What's new
+
+:eight_spoked_asterisk: **CON-1722**: Support definition of multiple volume mounts. 
+
+:eight_spoked_asterisk: **CON-1727**: Support support definition of environment variables. 
+
 ### 26.0.2
 
 2026 May
