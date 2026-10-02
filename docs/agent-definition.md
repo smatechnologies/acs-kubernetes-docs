@@ -99,12 +99,16 @@ To define the agent, complete the following steps:
 6. Select **General Settings**.
 7. Verify that the **NetCom Name** field is set to **Default**, or enter the name of the SMA Relay if a relay is in use.
 8. Select **Kubernetes Job Settings**.
-9. In the **Config Script** field, select the script that contains the `.kube/config` information.
-10. In the **Retain Log files** field, enter the number of days to retain log files.
+9. In the **Config Script** section, select the **Script Runner**, the **Script** that contains the `.kube/config` information, and the **Script Version**. The connector uses the file's current context.
+10. In the **Retain Log Files** field, enter the number of days to retain log files. The field is required and defaults to 30.
 11. Select the **Save** button.
 12. Select **Communication Settings**.
 13. Verify that the **Requires XML Escape Sequences: User-Defined** field is set to **True**. If it is not, set it to **True** and select the **Save** button.
 14. Select the **Change Communication Status** button and select **Enable Full Comm**. The agent connection is established.
+
+:::note
+Each run writes a copy of the `.kube/config`, including its credentials, to the `jobOutput\KubernetesJob` folder under the plugin directory. **Retain Log Files** deletes these copies, along with the job logs, once they are older than the number of days set.
+:::
 
 ## FAQs
 

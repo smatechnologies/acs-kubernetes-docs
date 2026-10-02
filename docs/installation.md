@@ -21,6 +21,11 @@ The ACS Kubernetes Connector is distributed as a plugin directory that you deplo
 - Use the installation procedure when setting up the connector in a new OpCon environment
 - Use the upgrade procedure when a new connector version is available and you need to apply it to an existing installation
 
+## Requirements
+
+- The server that runs SMANetCom (on-premises) or the relay (cloud) must be able to reach the Kubernetes cluster's API server.
+- The identity in the `.kube/config` must have permission, in the target namespace, to create, list and delete jobs, list pods, and read pod logs.
+
 ## Installation
 
 Download the ACS KubernetesJob software from the SMA FTP site. The files are located at `/OpCon Releases/Integrations/KubernetesJob/`. Select the required version and download the archive.
@@ -77,7 +82,7 @@ The upgraded connector is active after the services start.
 ## FAQs
 
 **Where do I find the connector download?**  
-The connector is available on the SMA FTP site at `/OpCon Releases/Integrations/KubernetesJob/`. Contact SMA Technologies support if you do not have FTP access.
+The connector is available on the SMA FTP site at `/OpCon Releases/Integrations/KubernetesJob/`. Contact Continuous Support if you do not have FTP access.
 
 **Do I need to stop services before installing for the first time?**  
 No. A fresh installation does not require stopping services first. Only upgrades require stopping services before replacing the plugin files.

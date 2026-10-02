@@ -1,4 +1,10 @@
 ---
+title: ACS Kubernetes Connector
+description: "Documentation for the ACS Kubernetes Connector, which submits, monitors and manages OpCon jobs in a Kubernetes cluster."
+tags:
+  - Conceptual
+  - System Administrator
+  - Automation Engineer
 slug: "/"
 hide_table_of_contents: true
 displayed_sidebar: null
