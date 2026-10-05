@@ -44,28 +44,38 @@ To define a Kubernetes job task, complete the following steps:
 9. In the **Integration Selection** section, select the Kubernetes agent previously defined.
 10. In the **Task Configuration** section, complete the following fields:
 
-    | Field | Description |
-    |---|---|
-    | **Environment Variables** | Multiple environment variables can be added by selecting the **+ AddItem** button. Variables consist of a **name** and a **value**. Select the **Value From** button is the variable is derived from an item. If this is selected enter a **key** and **name** value. When this is selected, the **Value** field is not required. |
-    | **Image** | The Docker Registry image that provides the runtime environment for the command |
-    | **Name Space** | The Kubernetes namespace to run the job in (default: `default`) |
-    | **Job Name** | The name assigned to the Kubernetes job object |
-    | **Container Name** | The name assigned to the container when the image runs |
-    | **Command** | The command to run inside the container. Separate multiple values with a comma (`,`) |
-    | **Arguments** | The arguments to pass to the command. Separate multiple values with a comma (`,`) |
-    | **Volume Mounts** | Optional information about a volume that should be mounted for the task to process. Add definitions by selecting the **+ AddItem** button. Enter the **Name**, the **Mount Path**, The **Claim Name** or **Secret Name** and select the **Read Only** button if the volume is read only. |
-    | **Resources** | Optional information about a volume that should be mounted for the task to process |
-    | **Request CPU** | The initial CPU allocation guaranteed to each pod | `250m` |
-    | **Request Memory** | The initial memory allocation guaranteed to each pod | `512Mi` |
-    | **Limit CPU** | The maximum CPU each pod may consume | `500m` |
-    | **Limit Memory** | The maximum memory each pod may consume | `1Gi` |
-    | **Pods to Complete** | The number of successful pod completions required (default: `1`) |
-    | **Parallel Executions** | The number of pods that may run concurrently (default: `1`) |
-    | **Restart Policy** | The restart policy to set for the job (values Never or OnFailure, default Never) |
-    | **BackOffLimits** | The BackOffLimits (no of retries on failure) value to set for the job (default 6) |
+    | Field | Description | Required | Default |
+    |---|---|---|---|
+    | **Environment Variables** | Multiple environment variables can be added by selecting the **+ AddItem** button. Each variable has a **Name** and a **Value**. To read the value from a Kubernetes Secret instead, select the **Value From** option and enter the **Key** within the secret and the **Name** of the secret. When **Value From** is selected, the **Value** field is not required. A value cannot contain `=` or `;` | No | |
+    | **Image** | The Docker Registry image that provides the runtime environment for the command | Yes | |
+    | **Name Space** | The Kubernetes namespace to run the job in | Yes | `default` |
+    | **Job Name** | The name assigned to the Kubernetes job object | Yes | |
+    | **Container Name** | The name assigned to the container when the image runs | Yes | |
+    | **Command** | The command to run inside the container. Separate multiple values with a comma (`,`); a value cannot contain a comma | Yes | |
+    | **Arguments** | The arguments to pass to the command. Separate multiple values with a comma (`,`); a value cannot contain a comma | No | |
+    | **Volume Mounts** | Optional information about a volume that should be mounted for the task to process. Add definitions by selecting the **+ AddItem** button. Enter the **Name**, the **Mount Path**, the **Claim Name** or **Secret Name**, and select the **Read Only** option if the volume is read only | No | |
+    | **Resources** | The CPU and memory requests and limits applied to each pod, set in the four fields that follow | Yes | |
+    | **Request CPU** | The initial CPU allocation guaranteed to each pod | Yes | `250m` |
+    | **Request Memory** | The initial memory allocation guaranteed to each pod | Yes | `512Mi` |
+    | **Limit CPU** | The maximum CPU each pod may consume | Yes | `500m` |
+    | **Limit Memory** | The maximum memory each pod may consume | Yes | `1Gi` |
+    | **Pods to Complete** | The number of pod runs the job needs. The job ends when the number of pods that have succeeded or failed reaches this value, and finishes successfully only if all of them succeeded | Yes | `1` |
+    | **Parallel Executions** | The number of pods that may run concurrently | Yes | `1` |
+    | **Restart Policy** | The restart policy to set for the job: **Never** or **OnFailure** | Yes | |
+    | **BackOffLimits** | The number of retries Kubernetes allows on failure. With **Restart Policy** set to **Never**, the first failed pod fails the job and the connector removes the Kubernetes job before it can retry. Retries happen with **OnFailure**, where Kubernetes restarts the container within the same pod | Yes | `6` |
 
 
 11. Select the **Save** button. The job is added to the schedule.
+
+## Killing a job
+
+:::caution
+Killing the job in OpCon does not delete the Kubernetes job. Its pods keep running in the cluster, and a later run with the same **Job Name** in that namespace fails until the job is deleted. Delete the job in the cluster, for example with `kubectl delete job <name> -n <namespace>`.
+:::
+
+## Job log
+
+The job log contains the job settings, the environment variables with their values, and the output of each pod. Environment variables entered as plain values appear in the job log as entered, so use **Value From** for sensitive values.
 
 ## FAQs
 
@@ -73,7 +83,7 @@ To define a Kubernetes job task, complete the following steps:
 Separate multiple values with a comma (`,`). For example, to pass two arguments, enter `--config,/etc/app/config.yaml` in the **Arguments** field.
 
 **What is the difference between Pods to Complete and Parallel Executions?**  
-**Pods to Complete** sets the total number of successful pod runs required before the job is considered finished. **Parallel Executions** sets how many of those pods can run at the same time. For example, setting **Pods to Complete** to `4` and **Parallel Executions** to `2` runs two pods at a time until four have completed successfully.
+**Pods to Complete** sets the total number of pod runs the job needs. **Parallel Executions** sets how many of those pods can run at the same time. For example, setting **Pods to Complete** to `4` and **Parallel Executions** to `2` runs two pods at a time until four have finished. The job finishes successfully only if all four succeeded.
 
 **What happens if a pod exceeds its CPU or memory limit?**  
 Kubernetes terminates any pod that exceeds its memory limit. CPU throttling applies when a pod exceeds its CPU limit. Set limits high enough to avoid unexpected pod terminations.
@@ -87,7 +97,7 @@ Yes. Global properties using the `[[property_name]]` token syntax are supported 
 
 **Namespace** — A Kubernetes isolation boundary that logically separates workloads within a cluster. Jobs submitted to a namespace are only visible to and affected by resources within that namespace.
 
-**Pods to Complete** — The Kubernetes job completion count. OpCon waits until this many pods have finished successfully before marking the job as complete.
+**Pods to Complete** — The number of pod runs the job needs. OpCon waits until this many pods have finished, and marks the job complete only if all of them succeeded.
 
 **Resource requests** — The minimum CPU and memory that Kubernetes guarantees to a pod. The cluster scheduler only places a pod on a node that has at least this much capacity available.
 
